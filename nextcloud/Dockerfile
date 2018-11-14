@@ -1,4 +1,6 @@
 FROM linuxserver/nextcloud
 
-RUN apt-get update \
-    && apt-get install -y tesseract-ocr tesseract-ocr-all
+RUN apk update && \
+    apk add --no-cache --update tesseract-ocr && \
+    apk search -qe 'tesseract-ocr-data-*' | xargs apk add --no-cache --update
+    
