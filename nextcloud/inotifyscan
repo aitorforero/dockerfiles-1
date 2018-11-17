@@ -1,0 +1,5 @@
+#!/usr/bin/with-contenv bash
+
+if [ -n "$INOTIFY_NEXTCLOUD_HOME" ] && [ -n "$INOTIFY_USER_NAME" ]; then
+  exec sudo -u abc NEXTCLOUD_HOME="$INOTIFY_NEXTCLOUD_HOME" USER_NAME="$INOTIFY_USER_NAME" /usr/local/bin/nextcloud-inotifyscan
+fi
