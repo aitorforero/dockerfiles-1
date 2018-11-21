@@ -14,5 +14,5 @@ RUN apk add --no-cache --update python inotify-tools && \
     /bin/chmod +x /usr/local/bin/nextcloud-inotifyscan && \
     mkdir -p /etc/services.d/inotifyscan && \
     ln -s /config/www/nextcloud/occ /occ
-ADD ./nextcloud/inotifyscan /etc/services.d/inotifyscan/run
+ADD ./inotifyscan /etc/services.d/inotifyscan/run
 RUN chmod +x /etc/services.d/inotifyscan/run
