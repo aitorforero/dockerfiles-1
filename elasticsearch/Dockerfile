@@ -1,2 +1,3 @@
 FROM elasticsearch:5.6.14-alpine
-RUN bin/elasticsearch-plugin install -b ingest-attachment
+RUN apk update && apk add curl; \
+    bin/elasticsearch-plugin install -b ingest-attachment
