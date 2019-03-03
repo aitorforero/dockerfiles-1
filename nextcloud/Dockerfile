@@ -5,7 +5,8 @@ RUN apk update && \
     apk add --no-cache --update \
     tesseract-ocr \
     tesseract-ocr-data-deu \
-    tesseract-ocr-data-jpn
+    tesseract-ocr-data-jpn \
+    php7-soap
 
 # nextcloud-inotifyscan
 # https://github.com/Blaok/nextcloud-inotifyscan
