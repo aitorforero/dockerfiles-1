@@ -11,8 +11,11 @@ RUN apk update && \
 # nextcloud-inotifyscan
 # https://github.com/Blaok/nextcloud-inotifyscan
 RUN apk add --no-cache --update python inotify-tools && \
-    /usr/bin/wget "https://raw.githubusercontent.com/Blaok/nextcloud-inotifyscan/master/nextcloud-inotifyscan" -O /usr/local/bin/nextcloud-inotifyscan && \
-    /bin/chmod +x /usr/local/bin/nextcloud-inotifyscan && \
+    mkdir -p /usr/local/src/nextcloud-inotifyscan && \
+    git clone https://github.com/Blaok/nextcloud-inotifyscan.git /usr/local/src/nextcloud-inotifyscan && \
+    /bin/chmod +x /usr/local/src/nextcloud-inotifyscan/nextcloud-inotifyscan && \
+    ln -s /usr/local/src/nextcloud-inotifyscan/nextcloud-inotifyscan /usr/local/bin/nextcloud-inotifyscan && \
+    cp /usr/local/src/nextcloud-inotifyscan/sample.ini /config/nextcloud-inotifyscan.ini && \
     mkdir -p /etc/services.d/inotifyscan && \
     ln -s /config/www/nextcloud/occ /occ
 ADD ./inotifyscan /etc/services.d/inotifyscan/run
