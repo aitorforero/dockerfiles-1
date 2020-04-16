@@ -6,9 +6,14 @@ MAINTAINER jakbutler
 #########################################
 ##        ENVIRONMENTAL CONFIG         ##
 #########################################
+
 # Calibre environment variables
 ENV CALIBRE_LIBRARY_DIRECTORY=/opt/calibredb/library
 ENV CALIBRE_CONFIG_DIRECTORY=/opt/calibredb/config
+
+# User
+ENV PUID=0
+ENV PGID=0
 
 # Auto-import directory
 ENV CALIBREDB_IMPORT_DIRECTORY=/opt/calibredb/import
@@ -29,6 +34,7 @@ RUN apk update && \
     mesa-gl \
     imagemagick \
     qt5-qtbase-x11 \
+    shadow \
     xdg-utils \
     xz && \
 #########################################
@@ -41,7 +47,9 @@ RUN apk update && \
 ##            Script Setup             ##
 #########################################
 ADD run_auto_importer.sh /usr/bin/run_auto_importer.sh
+ADD entrypoint.sh /usr/bin/entrypoint.sh
 RUN chmod a+x /usr/bin/run_auto_importer.sh
+RUN chmod a+x /usr/bin/entrypoint.sh
 
 #########################################
 ##         EXPORTS AND VOLUMES         ##
@@ -53,4 +61,4 @@ VOLUME /opt/calibredb/library
 #########################################
 ##           Startup Command           ##
 #########################################
-CMD /usr/bin/run_auto_importer.sh
+CMD /usr/bin/entrypoint.sh
