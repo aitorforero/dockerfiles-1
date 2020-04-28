@@ -51,7 +51,11 @@ do
 # Use the calibredb commandline api to import the new file or directory, which also copies it to the library,
 # then remove it from the import directory.
 # For more detail, see https://manual.calibre-ebook.com/generated/en/calibredb.html
-      su abc -s /opt/calibre/calibredb add $CALIBREDB_IMPORT_DIRECTORY -r --with-library $CALIBRE_LIBRARY_DIRECTORY && rm -rf $CALIBREDB_IMPORT_DIRECTORY/*
+      su abc -s /bin/bash -c \
+        "/opt/calibre/calibredb \
+        add $CALIBREDB_IMPORT_DIRECTORY \
+        -r --with-library $CALIBRE_LIBRARY_DIRECTORY && \
+        rm -rf $CALIBREDB_IMPORT_DIRECTORY/*"
     fi
 #TODO: Make this a configurable variable
     sleep 1m
