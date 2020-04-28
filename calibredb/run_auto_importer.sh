@@ -1,5 +1,18 @@
 #!/usr/bin/env bash
 
+set -e
+
+PUID=${PUID:-911}
+PGID=${PGID:-911}
+
+addgroup -S abc
+adduser -S abc -G abc
+groupmod -o -g "$PGID" abc
+usermod -o -u "$PUID" abc
+
+printf "=> Running as user: "
+su abc -s /usr/bin/id
+
 # Perform a software update, if requested
 my_version=`/opt/calibre/calibre --version | awk -F'[() ]' '{print $4}'`
 if [ ! "$AUTO_UPDATE" = "1" ]; then
@@ -38,7 +51,7 @@ do
 # Use the calibredb commandline api to import the new file or directory, which also copies it to the library,
 # then remove it from the import directory.
 # For more detail, see https://manual.calibre-ebook.com/generated/en/calibredb.html
-      /opt/calibre/calibredb add $CALIBREDB_IMPORT_DIRECTORY -r --with-library $CALIBRE_LIBRARY_DIRECTORY && rm -rf $CALIBREDB_IMPORT_DIRECTORY/*
+      su abc -s /opt/calibre/calibredb add $CALIBREDB_IMPORT_DIRECTORY -r --with-library $CALIBRE_LIBRARY_DIRECTORY && rm -rf $CALIBREDB_IMPORT_DIRECTORY/*
     fi
 #TODO: Make this a configurable variable
     sleep 1m
