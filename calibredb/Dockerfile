@@ -47,9 +47,7 @@ RUN apk update && \
 ##            Script Setup             ##
 #########################################
 ADD run_auto_importer.sh /usr/bin/run_auto_importer.sh
-ADD entrypoint.sh /usr/bin/entrypoint.sh
 RUN chmod a+x /usr/bin/run_auto_importer.sh
-RUN chmod a+x /usr/bin/entrypoint.sh
 
 #########################################
 ##         EXPORTS AND VOLUMES         ##
@@ -61,4 +59,4 @@ VOLUME /opt/calibredb/library
 #########################################
 ##           Startup Command           ##
 #########################################
-CMD /usr/bin/entrypoint.sh
+CMD /usr/bin/run_auto_importer.sh
