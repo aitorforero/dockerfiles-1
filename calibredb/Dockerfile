@@ -33,6 +33,7 @@ RUN apk update && \
     gcc \
     mesa-gl \
     imagemagick \
+    libstdc++6 \
     nss-dev \
     qt5-qtbase-x11 \
     shadow \
