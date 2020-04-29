@@ -33,6 +33,7 @@ RUN apk update && \
     gcc \
     mesa-gl \
     imagemagick \
+    nss-dev \
     qt5-qtbase-x11 \
     shadow \
     xdg-utils \
