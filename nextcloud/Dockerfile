@@ -6,11 +6,11 @@ RUN apk update && \
     tesseract-ocr \
     tesseract-ocr-data-deu \
     tesseract-ocr-data-jpn \
-    php7-soap
-
+    php7-soap \
 # nextcloud-inotifyscan
 # https://github.com/Blaok/nextcloud-inotifyscan
-RUN apk add --no-cache --update python inotify-tools && \
+    python3 \
+    inotify-tools && \
     mkdir -p /usr/local/src/nextcloud-inotifyscan && \
     git clone https://github.com/Blaok/nextcloud-inotifyscan.git /usr/local/src/nextcloud-inotifyscan && \
     /bin/chmod +x /usr/local/src/nextcloud-inotifyscan/nextcloud-inotifyscan && \
