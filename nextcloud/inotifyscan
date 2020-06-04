@@ -1,2 +1,5 @@
 #!/usr/bin/with-contenv bash
-exec sudo -u abc /usr/local/bin/nextcloud-inotifyscan --config /config/nextcloud-inotifyscan.ini
+CONFIG=/config/nextcloud-inotifyscan.ini
+if [ -f "$CONFIG" ]; then
+  exec sudo -u abc /usr/bin/python3 /usr/local/bin/nextcloud-inotifyscan --config "$CONFIG"
+fi
