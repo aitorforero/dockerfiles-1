@@ -28,21 +28,21 @@ RUN apk update && \
     apk add --no-cache --upgrade \
     bash \
     ca-certificates \
-    python \
-    wget \
     gcc \
-    mesa-gl \
     imagemagick \
     libstdc++6 \
+    mesa-gl \
     nss-dev \
+    python3 \
     qt5-qtbase-x11 \
     shadow \
+    wget \
     xdg-utils \
     xz && \
 #########################################
 ##            APP INSTALL              ##
 #########################################
-    wget -O- https://raw.githubusercontent.com/kovidgoyal/calibre/master/setup/linux-installer.py | python -c "import sys; main=lambda:sys.stderr.write('Download failed\n'); exec(sys.stdin.read()); main(install_dir='/opt', isolated=True)" && \
+    wget -O- https://raw.githubusercontent.com/kovidgoyal/calibre/master/setup/linux-installer.py | python3 -c "import sys; main=lambda:sys.stderr.write('Download failed\n'); exec(sys.stdin.read()); main(install_dir='/opt', isolated=True)" && \
     rm -rf /tmp/calibre-installer-cache
 
 #########################################

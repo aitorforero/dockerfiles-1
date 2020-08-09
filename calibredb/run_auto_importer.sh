@@ -5,10 +5,10 @@ set -e
 PUID=${PUID:-911}
 PGID=${PGID:-911}
 
-addgroup -S abc
-adduser -S abc -G abc
-groupmod -o -g "$PGID" abc
-usermod -o -u "$PUID" abc
+groupadd -f abc
+id -u abc &>/dev/null || adduser -S abc -G abc
+groupmod -o -g "$PGID" abc || true
+usermod -o -u "$PUID" abc || true
 
 printf "=> Running as user: "
 su abc -s /usr/bin/id
