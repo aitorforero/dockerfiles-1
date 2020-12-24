@@ -1,0 +1,60 @@
+#!/bin/bash
+# chkconfig: 2345 20 80
+# description: Docker inotify-scan service
+
+. /lib/lsb/init-functions
+
+PID="/var/run/inotify-scan.pid"
+DAEMON="/usr/local/bin/nextcloud-inotifyscan"
+INOTIFY_SCAN_CONFIG="/etc/inotifyscan/config.ini"
+
+if [ ! -f "$INOTIFY_SCAN_CONFIG" ]; then
+    echo "Config file doesn't exist at $INOTIFY_SCAN_CONFIG"
+    exit 1
+fi
+
+start() {
+    /sbin/start-stop-daemon \
+        -b \
+        -m \
+        --start \
+        --quiet \
+        -c www-data \
+        --pidfile "$PID" \
+        --exec "$DAEMON" \
+        -- \
+        --config "$INOTIFY_SCAN_CONFIG"
+}
+
+stop() {
+    kill $(pgrep -f "inotify") || true
+    rm -f "$PID"
+}
+
+status() {
+    status_of_proc \
+        -p "$PID" \
+        "$DAEMON" \
+        && exit 0 || exit $?
+}
+
+case "$1" in
+    start)
+       stop
+       start
+       ;;
+    stop)
+       stop
+       ;;
+    restart)
+       stop
+       start
+       ;;
+    status)
+       status
+       ;;
+    *)
+       echo "Usage: $0 {start|stop|status|restart}"
+esac
+
+exit 0
