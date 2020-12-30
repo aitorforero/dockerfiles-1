@@ -1,17 +1,33 @@
-FROM nextcloud
+FROM linuxserver/nextcloud
 
-RUN apt-get update && \
-    apt-get -y --no-install-recommends install inotify-tools python unzip && \
-    curl -o /tmp/master.zip https://codeload.github.com/Blaok/nextcloud-inotifyscan/zip/master && \
-    unzip /tmp/master.zip -d /usr/local/src && \
-    rm /tmp/master.zip && \
-    /bin/chmod +x /usr/local/src/nextcloud-inotifyscan-master/nextcloud-inotifyscan && \
-    ln -s /usr/local/src/nextcloud-inotifyscan-master/nextcloud-inotifyscan /usr/local/bin/nextcloud-inotifyscan && \
-    mkdir -p /etc/inotifyscan && \
-    cp /usr/local/src/nextcloud-inotifyscan-master/sample.ini /etc/inotifyscan/config.ini && \
-    apt-get -y remove unzip && \
-    apt-get -y autoremove && \
-    rm -rf /var/lib/apt/lists/*
+# https://github.com/linuxserver/docker-nextcloud/pull/166
+RUN apk del php7-iconv
 
-ADD ./etc/init.d/inotifyscan /etc/init.d
-RUN chmod +x /etc/init.d/inotifyscan
+# tesseract-ocr
+RUN apk update && \
+    apk add --no-cache --update \
+    tesseract-ocr \
+    tesseract-ocr-data-deu \
+    tesseract-ocr-data-jpn \
+    php7-soap \
+# nextcloud-inotifyscan
+# https://github.com/Blaok/nextcloud-inotifyscan
+    python3 \
+    inotify-tools && \
+    mkdir -p /usr/local/src/nextcloud-inotifyscan && \
+    git clone https://github.com/Blaok/nextcloud-inotifyscan.git /usr/local/src/nextcloud-inotifyscan && \
+    /bin/chmod +x /usr/local/src/nextcloud-inotifyscan/nextcloud-inotifyscan && \
+    ln -s /usr/local/src/nextcloud-inotifyscan/nextcloud-inotifyscan /usr/local/bin/nextcloud-inotifyscan && \
+    cp /usr/local/src/nextcloud-inotifyscan/sample.ini /config/nextcloud-inotifyscan.ini && \
+    mkdir -p /etc/services.d/inotifyscan && \
+    ln -s /config/www/nextcloud/occ /occ && \
+# https://github.com/linuxserver/docker-nextcloud/pull/166
+    echo "**** Install iconv extension ****" && \
+    apk add --update-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community/ --allow-untrusted \
+	gnu-libiconv \
+	php7-iconv
+# Preload iconv extension
+ENV LD_PRELOAD=/usr/lib/preloadable_libiconv.so
+
+ADD ./inotifyscan /etc/services.d/inotifyscan/run
+RUN chmod +x /etc/services.d/inotifyscan/run
