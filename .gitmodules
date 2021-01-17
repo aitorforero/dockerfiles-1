@@ -1,3 +1,0 @@
-[submodule "plexconnect"]
-	path = plexconnect
-	url = git@github.com:Fish2/docker-plexconnect.git
