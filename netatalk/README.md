@@ -46,8 +46,8 @@ To setup access credentials you should supply the following environment variable
 |---------------|-----------|
 |AFP_USER       | create a user in the container and allow it access to /media/share    |
 |AFP_PASSWORD   | password
-|AFP_UID        | _uid_ of the created user
-|AFP_GID        | _gid_ of the created user
+|AFP_UID        |_uid_ of the created user
+|AFP_GID        |_gid_ of the created user
 
 #### Example
 
@@ -88,6 +88,7 @@ Thanks to @rrva for his work updating this image to [Netatalk] version 3.1.8 and
 This image has been created with the best intentions and an expert understanding of docker, but it should not be expected to be flawless. Should you be in the position to do so, I request that you help support this repository with best-practices and other additions.
 
 If you see out of date documentation, lack of tests, etc., you can help out by either
+
 - creating an issue and opening a discussion, or
 - sending a pull request with modifications
 

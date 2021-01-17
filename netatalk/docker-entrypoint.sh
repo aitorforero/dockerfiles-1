@@ -1,15 +1,15 @@
 #!/bin/bash
 
-if [ ! -z "${AFP_USER}" ]; then
-    if [ ! -z "${AFP_UID}" ]; then
+if [ -n "${AFP_USER}" ]; then
+    if [ -n "${AFP_UID}" ]; then
         cmd="$cmd --uid ${AFP_UID}"
     fi
-    if [ ! -z "${AFP_GID}" ]; then
+    if [ -n "${AFP_GID}" ]; then
         cmd="$cmd --gid ${AFP_GID}"
-        groupadd --gid ${AFP_GID} ${AFP_USER}
+        groupadd --gid "${AFP_GID}" "${AFP_USER}"
     fi
-    adduser $cmd --no-create-home --disabled-password --gecos '' "${AFP_USER}"
-    if [ ! -z "${AFP_PASSWORD}" ]; then
+    adduser "$cmd" --no-create-home --disabled-password --gecos '' "${AFP_USER}"
+    if [ -n "${AFP_PASSWORD}" ]; then
         echo "${AFP_USER}:${AFP_PASSWORD}" | chpasswd
     fi
 fi

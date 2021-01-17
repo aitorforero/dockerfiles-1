@@ -14,12 +14,12 @@ printf "=> Running as user: "
 su abc -s /usr/bin/id
 
 # Perform a software update, if requested
-my_version=`/opt/calibre/calibre --version | awk -F'[() ]' '{print $4}'`
+my_version=$(/opt/calibre/calibre --version | awk -F'[() ]' '{print $4}')
 if [ ! "$AUTO_UPDATE" = "1" ]; then
   echo "AUTO_UPDATE not requested, keeping installed version of $my_version."
 else
   echo "AUTO_UPDATE requested, checking for latest version..."
-  latest_version=`wget -q -O- https://raw.githubusercontent.com/kovidgoyal/calibre/master/Changelog.yaml | grep -m 1 "^- version:" | awk '{print $3}'`
+  latest_version=$(wget -q -O- https://raw.githubusercontent.com/kovidgoyal/calibre/master/Changelog.yaml | grep -m 1 "^- version:" | awk '{print $3}')
   if [ "$my_version" != "$latest_version" ]
   then
     echo "Updating from $my_version to $latest_version."
@@ -45,8 +45,8 @@ echo "Starting auto-importer process."
 # Continuously watch for new content in the defined import directory.
 while true
 do
-    count=`find $CALIBREDB_IMPORT_DIRECTORY -mindepth 1 -maxdepth 1 | wc -l`
-    if [ $count -gt 0 ]; then
+    count=$(find $CALIBREDB_IMPORT_DIRECTORY -mindepth 1 -maxdepth 1 | wc -l)
+    if [ "$count" -gt 0 ]; then
       echo "Attempting import of $count new files/directories."
 # Use the calibredb commandline api to import the new file or directory, which also copies it to the library,
 # then remove it from the import directory.

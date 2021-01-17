@@ -3,6 +3,8 @@ ENV NETATALK_VERSION 3.1.12
 
 ENV DEPS="build-essential libevent-dev libssl-dev libgcrypt11-dev libkrb5-dev libpam0g-dev libwrap0-dev libdb-dev libtdb-dev libmysqlclient-dev libavahi-client-dev libacl1-dev libldap2-dev libcrack2-dev systemtap-sdt-dev libdbus-1-dev libdbus-glib-1-dev libglib2.0-dev libtracker-sparql-1.0-dev libtracker-miner-1.0-dev file"
 ENV DEBIAN_FRONTEND=noninteractive
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN apt-get update \
  && apt-get install \
         --no-install-recommends \
@@ -11,13 +13,15 @@ RUN apt-get update \
         $DEPS \
         tracker \
         avahi-daemon \
-        curl wget \
-        &&  wget      "http://ufpr.dl.sourceforge.net/project/netatalk/netatalk/${NETATALK_VERSION}/netatalk-${NETATALK_VERSION}.tar.gz" \
-        &&  curl -SL  "http://ufpr.dl.sourceforge.net/project/netatalk/netatalk/${NETATALK_VERSION}/netatalk-${NETATALK_VERSION}.tar.gz" | tar xvz
+        curl \
+        &&  curl -SL  "http://ufpr.dl.sourceforge.net/project/netatalk/netatalk/${NETATALK_VERSION}/netatalk-${NETATALK_VERSION}.tar.gz" | tar xvz && \
+        rm -rf /var/lib/apt/lists/*
 
-WORKDIR netatalk-${NETATALK_VERSION}
+WORKDIR /netatalk-${NETATALK_VERSION}
 
-RUN ./configure \
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+RUN apt-get update && \
+        ./configure \
         --prefix=/usr \
         --sysconfdir=/etc \
         --with-init-style=debian-systemd \
@@ -34,7 +38,7 @@ RUN ./configure \
         $DEPS \
         tracker-gui \
         libgl1-mesa-dri \
-        &&  DEBIAN_FRONTEND=noninteractive apt-get install --yes \
+        &&  DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
         libevent-2.0 \
         libavahi-client3 \
         libevent-core-2.0 \
@@ -54,7 +58,8 @@ RUN ./configure \
                 &&  rm -rf /usr/share/mime \
                  &&  rm -rf /usr/share/GeoIP \
                   &&  rm -rf /var/lib/apt/lists* \
-                   &&  mkdir /media/share
+                   &&  mkdir /media/share \
+                    &&  rm -rf /var/lib/apt/lists/*
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 COPY afp.conf /etc/afp.conf
