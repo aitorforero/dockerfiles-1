@@ -12,6 +12,7 @@ ARG MONEYWIZ_URL=https://windows.moneywizapp.com/free/setup.exe
 ENV APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=DontWarn
 WORKDIR /tmp
 
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN echo "=> Preparing..." && \
     DEBIAN_FRONTEND=noninteractive apt-get update && \
     apt-get -y --no-install-recommends install apt-utils && \
@@ -35,7 +36,7 @@ RUN echo "=> Preparing..." && \
     env WINEPREFIX=/opt/moneywiz WINEARCH=win64 WINEDLLOVERRIDES="mscoree,mshtml=" sh /tmp/winetricks -q dotnet461 corefonts && \
     wget "http://download.microsoft.com/download/A/8/0/A80747C3-41BD-45DF-B505-E9710D2744E0/vcredist_x64.exe" -O /tmp/vcredist_x64.exe && \
     env WINEPREFIX=/opt/moneywiz WINEARCH=win64 wine64 /tmp/vcredist_x64.exe /q /norestart && \
-    while ps | grep -v grep | grep -qw wineserver; do sleep 1; done && sleep 5 && while ps | grep -v grep | grep -qw wineserver; do sleep 1; done && \
+    while pgrep wineserver; do sleep 1; done && sleep 5 && while pgrep wineserver; do sleep 1; done && \
     echo "Downloading MoneyWiz setup..." && \
     wget "https://windows.moneywizapp.com/free/setup.exe" -O /opt/moneywiz/setup.exe && \
     # Rename Windows user.
@@ -66,7 +67,8 @@ RUN echo "=> Preparing..." && \
     DEBIAN_FRONTEND=noninteractive apt-get -y autoremove && \
     find "/opt/moneywiz/drive_c/windows/Microsoft.NET" -name "SetupCache" -type d -exec rm -rf {} \; 2> /dev/null || true && \
     rm -rf /root/.cache/winetricks/ && \
-    rm -rf /tmp/*
+    rm -rf /tmp/* && \
+    rm -rf /var/lib/apt/lists/* 
 
 # Add files.
 COPY rootfs/ /

@@ -1,7 +1,7 @@
 # Use an Alpine linux base image with GNU libc (aka glibc) pre-installed, courtesy of Vlad Frolov
-FROM frolvlad/alpine-glibc
+FROM frolvlad/alpine-glibc:alpine-3.11_glibc-2.31
 
-MAINTAINER jakbutler
+LABEL maintainer="jakbutler"
 
 #########################################
 ##        ENVIRONMENTAL CONFIG         ##
@@ -24,6 +24,7 @@ ENV AUTO_UPDATE=0
 #########################################
 ##         DEPENDENCY INSTALL          ##
 #########################################
+SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 RUN apk update && \
     apk add --no-cache --upgrade \
     bash \
@@ -48,7 +49,7 @@ RUN apk update && \
 #########################################
 ##            Script Setup             ##
 #########################################
-ADD run_auto_importer.sh /usr/bin/run_auto_importer.sh
+COPY run_auto_importer.sh /usr/bin/run_auto_importer.sh
 RUN chmod a+x /usr/bin/run_auto_importer.sh
 
 #########################################
@@ -61,4 +62,4 @@ VOLUME /opt/calibredb/library
 #########################################
 ##           Startup Command           ##
 #########################################
-CMD /usr/bin/run_auto_importer.sh
+CMD ["/usr/bin/run_auto_importer.sh"]

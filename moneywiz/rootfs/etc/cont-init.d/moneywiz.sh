@@ -1,4 +1,4 @@
-#!/usr/bin/with-contenv sh
+#!/bin/sh
 
 set -e # Exit immediately if a command exits with a non-zero status.
 set -u # Treat unset variables as an error.
@@ -17,6 +17,6 @@ mkdir -p /home/app
 chown app:app /home/app
 
 # Take ownership of the config directory content.
-find /config -mindepth 1 -exec chown $USER_ID:$GROUP_ID {} \;
+find /config -mindepth 1 -exec chown "$USER_ID":"$GROUP_ID" {} \;
 
 # vim: set ft=sh :
