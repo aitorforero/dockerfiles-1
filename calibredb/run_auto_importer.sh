@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -euxo pipefail
 
 PUID=${PUID:-911}
 PGID=${PGID:-911}

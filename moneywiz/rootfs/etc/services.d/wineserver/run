@@ -1,6 +1,6 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
-set -u # Treat unset variables as an error.
+set -euxo pipefail
 
 SRVCMD="/usr/bin/wineserver --foreground --persistent"
 
