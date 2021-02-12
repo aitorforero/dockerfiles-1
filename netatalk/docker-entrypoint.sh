@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -euxo pipefail
+set -euo pipefail
 
 if [ -n "${AFP_USER}" ]; then
     if [ -n "${AFP_UID}" ]; then

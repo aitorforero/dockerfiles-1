@@ -1,16 +1,22 @@
 #!/usr/bin/env bash
 
-set -euxo pipefail
+set -euo pipefail
+
+function prefix {
+  printf "[%s] [inotifyscan]" "$(date)"
+}
 
 if [ -f "$INOTIFY_CONFIG" ]; then
   printf "===\n"
-  printf "[inotifyscan]: Config:\n===\n$%s\n===\n" "$(cat "$INOTIFY_CONFIG")"
-  printf "[inotifyscan]: Starting...\n"
-  gosu www-data /usr/bin/python /usr/local/bin/nextcloud-inotifyscan --config "$INOTIFY_CONFIG" &
-  printf "\n[inotifyscan]: Started\n"
+  printf "%s config:\n===\n$%s\n===\n" "$(prefix)" "$(cat "$INOTIFY_CONFIG")"
+  printf "%s starting...\n" "$(prefix)"
+  gosu www-data /usr/bin/python /usr/local/bin/nextcloud-inotifyscan \
+    --config "$INOTIFY_CONFIG" \
+    | sed -e "s/^/$(prefix) /" &
+  printf "\n%s started\n" "$(prefix)"
   printf "===\n"
 else
-  echo "[inotifyscan]: No config found at $INOTIFY_CONFIG. Exiting"
+  printf "%s No config found at %s\n" "$(prefix)" "$INOTIFY_CONFIG" 
 fi
 
 /entrypoint-nextcloud.sh "$@"
