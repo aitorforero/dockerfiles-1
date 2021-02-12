@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -euxo pipefail
+set -euo pipefail
 
 # Make sure mandatory directories exist.
 mkdir -p /config/temp

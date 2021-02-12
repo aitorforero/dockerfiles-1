@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -euxo pipefail
+set -euo pipefail
 
 if [ -f "$INOTIFY_CONFIG" ]; then
   printf "===\n"
