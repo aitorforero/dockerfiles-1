@@ -4,7 +4,14 @@ FROM nextcloud:latest
 ENV INOTIFY_CONFIG="/inotifyscan.ini"
 
 RUN apt-get update && \
-    apt-get -y --no-install-recommends install inotify-tools python unzip gosu smbclient && \
+    apt-get -y --no-install-recommends install \
+        gosu \
+        inotify-tools \
+        python \
+        smbclient \
+        tesseract-ocr-deu \
+        tesseract-ocr-jpn \
+        unzip && \
     curl -o /tmp/master.zip https://codeload.github.com/Blaok/nextcloud-inotifyscan/zip/master && \
     unzip /tmp/master.zip -d /usr/local/src && \
     rm /tmp/master.zip && \
