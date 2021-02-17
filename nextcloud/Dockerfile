@@ -9,6 +9,7 @@ RUN apt-get update && \
         inotify-tools \
         python \
         smbclient \
+        tesseract-ocr \
         tesseract-ocr-deu \
         tesseract-ocr-jpn \
         unzip && \
