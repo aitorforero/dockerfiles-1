@@ -7,6 +7,7 @@ RUN apt-get update && \
     apt-get -y --no-install-recommends install \
         gosu \
         inotify-tools \
+        imagemagick \
         python \
         smbclient \
         tesseract-ocr \
