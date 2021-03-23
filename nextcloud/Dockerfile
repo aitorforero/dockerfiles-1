@@ -24,6 +24,7 @@ RUN apt-get update && \
     apt-get -y autoremove && \
     rm -rf /var/lib/apt/lists/* && \
     groupadd -g 1000 share && \
-    usermod -a -G share root
+    usermod -a -G share root && \
+    usermod -a -G share www-data
 RUN mv /entrypoint.sh /entrypoint-nextcloud.sh
 COPY ./inotifyscan.sh /entrypoint.sh
