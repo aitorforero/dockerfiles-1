@@ -53,9 +53,12 @@ do
       echo "Importing \"$filename\"..."
 
       res=$(/opt/calibre/calibredb add "$filename" --with-library $CALIBRE_LIBRARY_DIRECTORY )
-      if echo "$res" | grep -q "Added"; then
+      if echo $res | grep -q "Added"
+      then
         echo "Deleting \"$filename\"..."
         rm -f \"$filename\"
+      else
+        echo "Not deleted"
       fi  
    done
    shopt -s nullglob  
