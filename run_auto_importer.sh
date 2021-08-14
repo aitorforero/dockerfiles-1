@@ -52,7 +52,7 @@ do
    do
       echo "Importing \"$filename\"..."
 
-      /opt/calibre/calibredb add \"$filename\" --with-library $CALIBRE_LIBRARY_DIRECTORY 
+      /opt/calibre/calibredb add "$filename" --with-library $CALIBRE_LIBRARY_DIRECTORY 
       
       rm -f \"$filename\"
 
