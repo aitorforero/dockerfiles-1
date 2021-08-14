@@ -43,20 +43,20 @@ fi
 
 echo "Starting auto-importer process."
 # Continuously watch for new content in the defined import directory.
+su abc -l
 while true
 do
-    count=$(find $CALIBREDB_IMPORT_DIRECTORY -mindepth 1 -maxdepth 1 | wc -l)
-    if [ "$count" -gt 0 ]; then
-      echo "Attempting import of $count new files/directories."
-# Use the calibredb commandline api to import the new file or directory, which also copies it to the library,
-# then remove it from the import directory.
-# For more detail, see https://manual.calibre-ebook.com/generated/en/calibredb.html
-      su abc -s /bin/bash -c \
-        "/opt/calibre/calibredb \
-        add $CALIBREDB_IMPORT_DIRECTORY \
-        -r --with-library $CALIBRE_LIBRARY_DIRECTORY && \
-        rm -rf $CALIBREDB_IMPORT_DIRECTORY/*"
-    fi
-#TODO: Make this a configurable variable
-    sleep 1m
+   shopt -s nullglob
+   for filename in *.epub
+   do
+      echo "Importing \"$filename\"..."
+
+      /opt/calibre/calibredb add \"$filename\" --with-library $CALIBRE_LIBRARY_DIRECTORY 
+      
+      rm -f \"$filename\"
+
+   done
+   shopt -s nullglob  
+   echo "Otra vuelta"
+   sleep 1m
 done
