@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#set -euo pipefail
+set -euo pipefail
 
 PUID=${PUID:-911}
 PGID=${PGID:-911}
@@ -52,14 +52,15 @@ do
    do
       echo "Importing \"$filename\"..."
 
-      /opt/calibre/calibredb add "$filename" --with-library $CALIBRE_LIBRARY_DIRECTORY 
-      
-      rm -f \"$filename\"
-
+      res=$(/opt/calibre/calibredb add "$filename" --with-library $CALIBRE_LIBRARY_DIRECTORY )
+      if echo "$res" | grep -q "Added"; then
+        echo "Deleting \"$filename\"..."
+        rm -f \"$filename\"
+      fi  
    done
    shopt -s nullglob  
 
    echo "Me duermo"
-   sleep 1m
+   sleep 30s
    echo "Otra vuelta"
 done
