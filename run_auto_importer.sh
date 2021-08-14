@@ -44,6 +44,7 @@ fi
 echo "Starting auto-importer process."
 # Continuously watch for new content in the defined import directory.
 su abc -l
+cd $CALIBREDB_IMPORT_DIRECTORY 
 while true
 do
    shopt -s nullglob
@@ -57,6 +58,8 @@ do
 
    done
    shopt -s nullglob  
-   echo "Otra vuelta"
+
+   echo "Me duermo"
    sleep 1m
+   echo "Otra vuelta"
 done
