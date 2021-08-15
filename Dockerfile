@@ -18,6 +18,9 @@ ENV PGID=0
 # Auto-import directory
 ENV CALIBREDB_IMPORT_DIRECTORY=/opt/calibredb/import
 
+# Auto-import directory
+ENV CALIBREDB_ERROR_DIRECTORY=/opt/calibredb/error
+
 # Flag for automatically updating to the latest version on startup
 ENV AUTO_UPDATE=0
 
@@ -58,6 +61,7 @@ RUN chmod a+x /usr/bin/run_auto_importer.sh
 VOLUME /opt/calibredb/config
 VOLUME /opt/calibredb/import
 VOLUME /opt/calibredb/library
+VOLUME /opt/calibredb/error
 
 #########################################
 ##           Startup Command           ##

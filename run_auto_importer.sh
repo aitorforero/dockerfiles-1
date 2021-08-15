@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
+#set -euo pipefail
 
 PUID=${PUID:-911}
 PGID=${PGID:-911}
@@ -40,10 +40,12 @@ fi
 if [ -z "$CALIBREDB_IMPORT_DIRECTORY" ]; then
   CALIBREDB_IMPORT_DIRECTORY=/opt/calibredb/import
 fi
+if [ -z "$CALIBREDB_ERROR_DIRECTORY" ]; then
+  CALIBREDB_ERROR_DIRECTORY=/opt/calibredb/error
+fi
 
 echo "Starting auto-importer process."
 # Continuously watch for new content in the defined import directory.
-su abc -l
 cd $CALIBREDB_IMPORT_DIRECTORY 
 while true
 do
@@ -52,13 +54,20 @@ do
    do
       echo "Importing \"$filename\"..."
 
-      res=$(/opt/calibre/calibredb add "$filename" --with-library $CALIBRE_LIBRARY_DIRECTORY )
-      if echo $res | grep -q "Added"
-      then
+      /opt/calibre/calibredb add "$filename" --with-library $CALIBRE_LIBRARY_DIRECTORY 2>&1 | tee res.txt
+
+      if (grep "Traceback (most recent call last)" res.txt); then
+        echo "Not deleted due an error"  
+	mv "$filename" $CALIBREDB_ERROR_DIRECTORY
+      elif (grep "The following books were not added as they already exist" res.txt);then
+        echo "Deleting duplicated \"$filename\"..."
+        rm "$filename"
+      elif (grep "Added book ids" res.txt );then
         echo "Deleting \"$filename\"..."
-        rm -f \"$filename\"
+        rm "$filename"
       else
-        echo "Not deleted"
+        echo "Not deleted"  
+	mv "$filename" $CALIBREDB_ERROR_DIRECTORY
       fi  
    done
    shopt -s nullglob  
